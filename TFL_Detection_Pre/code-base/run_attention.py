@@ -24,7 +24,7 @@ import scipy.ndimage as ndimage
 from scipy.ndimage import maximum_filter
 from PIL import Image
 import matplotlib.pyplot as plt
-
+from consts import CSV_INPUT
 
 def find_tfl_lights(c_image: np.ndarray, **kwargs) -> Dict[str, Any]:
     """
@@ -77,14 +77,21 @@ def test_find_tfl_lights(row: Series, args: Namespace) -> DataFrame:
 
     # Copy all image metadata from the row into the results, so we can track it later
     for k, v in row.items():
-        attention[k] = v
-
-    tfl_x: np.ndarray = attention[X].values
-    tfl_y: np.ndarray = attention[Y].values
-    color: np.ndarray = attention[COLOR].values
-    is_red = color == RED
-
-    print(f"Image: {image_path}, {is_red.sum()} reds, {len(is_red) - is_red.sum()} greens..")
+        for k, v in row.items():
+            if k == 'x' or k == 'y':
+                continue
+            attention[k] = v
+            attention[k] = v
+        tfl_x: np.ndarray = attention[X].values
+        tfl_x: np.ndarray = attention[X].values
+        tfl_y: np.ndarray = attention[Y].values
+        tfl_y: np.ndarray = attention[Y].values
+        color: np.ndarray = attention[COLOR].values
+        color: np.ndarray = attention[COLOR].values
+        is_red = color == RED
+        is_red = color == RED
+        red_amount = attention_dict["color"].count("r")
+        print(f"Image: {image_path}, {red_amount} reds, {len(is_red) - red_amount} greens..")
 
     if args.debug:
         # And here are some tips & tricks regarding matplotlib
@@ -127,7 +134,7 @@ def prepare_list(in_csv_file: Path, args: Namespace) -> DataFrame:
     csv_list: DataFrame = get_images_metadata(in_csv_file,
                                               max_count=args.count,
                                               take_specific=args.image)
-    return pd.concat([pd.DataFrame(columns=CSV_OUTPUT), csv_list], ignore_index=True)
+    return pd.concat([pd.DataFrame(columns=CSV_INPUT), csv_list], ignore_index=True)
 
 
 def run_on_list(meta_table: pd.DataFrame, func: callable, args: Namespace) -> pd.DataFrame:
