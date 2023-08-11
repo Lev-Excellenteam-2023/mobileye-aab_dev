@@ -52,7 +52,9 @@ ATTENTION_PATH: Path = DATA_DIR / 'attention_results'
 ATTENTION_CSV_NAME: str = 'attention_results.csv'
 CROP_CSV_NAME: str = 'crop_results.csv'
 
-
 # File names (directories to be appended automatically)
 TFLS_CSV: str = 'tfls.csv'
 CSV_OUTPUT_NAME: str = 'results.csv'
+
+# required percentage of a traffic light polygon to be  contained in a crop to be valid
+CROP_POLYGON_OVERLAP = 0.8
