@@ -32,7 +32,7 @@ def run_one_train_epoch(model: MyNeuralNetworkBase, dataset: TrafficLightDataSet
     sampler = WeightedRandomSampler(weights, len(weights)) if balance_samples else None
     data_loader = DataLoader(train_dataset, batch_size=16, sampler=sampler)
     loss_func = model.loss_func
-    optimizer = optim.Adam(model.parameters(), lr=0.0001)
+    optimizer = optim.Adam(model.parameters(), lr=0.00015)
     acc_loss = 0
     tot_samples = 0
     for i_batch, batch in enumerate(data_loader):
@@ -216,7 +216,7 @@ def main():
     model_name = 'my_model_final_2'
     train_dataset = TrafficLightDataSet(base_dir, full_images_dir, is_train=True)
     test_dataset = TrafficLightDataSet(base_dir, full_images_dir, is_train=False)
-    trained_model_path = go_train(base_dir, model_name, train_dataset, test_dataset, num_epochs=3)
+    trained_model_path = go_train(base_dir, model_name, train_dataset, test_dataset, num_epochs=15)
     examine_my_results(base_dir, full_images_dir, trained_model_path, test_dataset)
 
 
