@@ -64,9 +64,9 @@ class TrafficLightDataSet(Dataset):
         crop_data = pd.read_csv(crops_csv_path)  # type: pd.DataFrame
         self.attn_data = pd.read_csv(attention_csv_path)  # type: pd.DataFrame  # To trace back using original picture
         self.attn_data[C.SEQ] = np.arange(len(self.attn_data))
-        train_ratio = kwargs.get('train_ratio', 0.8)  # Amount of train data in the whole data
-        with temp_seed(0):
-            is_train = np.random.random(len(crop_data)) <= train_ratio
+        train_ratio = kwargs.get('train_ratio', 0.9)  # Amount of train data in the whole data
+      #  with temp_seed(0):
+        is_train = np.random.random(len(crop_data)) <= train_ratio
 
         ignore_ignore = (~crop_data[C.IS_IGNORE]) & kwargs.get('ignore_ignore', True)
 
@@ -115,12 +115,11 @@ class MyNeuralNetworkBase(nn.Module):
     def set_net_and_loss(self):
         # Feel free to inherit this class and override this function.
         # Here are some totally useless layers. See what YOU need!
-        self.layers = (nn.Conv2d(self.num_in_channels, 5, (1, 1)),
+        self.layers = (nn.Conv2d(self.num_in_channels, 32, 7,padding=3),
                        nn.ReLU(),
-                       nn.Flatten(1, -1),
-                       nn.Linear(5 * self.w * self.h, 1),
+                       nn.Flatten(1,-1),
+                       nn.Linear(32 * self.w * self.h, 1),
                        )
-
         # This is the recommended loss:
         self.loss_func = nn.BCEWithLogitsLoss
 
